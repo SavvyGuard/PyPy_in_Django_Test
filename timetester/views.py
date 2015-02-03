@@ -22,7 +22,7 @@ def test_openrtb(request):
 
     return HttpResponse('', content_type="application/json")
 
-def test_uuidb(request):
+def test_uuid(request):
     test_id = uuid.uuid1()
     return HttpResponse('', content_type="application/json")
 
