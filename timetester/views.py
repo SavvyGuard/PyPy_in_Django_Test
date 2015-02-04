@@ -3,6 +3,8 @@ import uuid
 
 import openrtb
 import geoip2.database
+from kafka import KafkaClient
+from kafka import SimpleProducer
 
 from django.shortcuts import HttpResponse
 from django.conf import settings
@@ -17,8 +19,8 @@ def test_json(request):
 
 def test_openrtb(request):
     request_dict = json.loads(request.body)
-    bidrequest = openrtb.request.BidRequest.deserialize(request_json)
-    openrtb.serialize(request_dict)
+    bidrequest = openrtb.request.BidRequest.deserialize(request_dict)
+    result = bidrequest.serialize()
 
     return HttpResponse('', content_type="application/json")
 
@@ -36,5 +38,5 @@ def test_kafka(request):
     KAFKA_TIMEOUT       = 5
     kafka_client = KafkaClient(KAFKA_BROKER_URL, timeout = KAFKA_TIMEOUT)
     kafka_producer = SimpleProducer(kafka_client)
-    kafka_producer.send_messages("dummy_test", outcome_json)
+    kafka_producer.send_messages("dummy_empty", "")
     return HttpResponse('', content_type="application/json")
